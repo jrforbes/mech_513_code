@@ -46,7 +46,7 @@ def main():
     Lamb_A, V_A = np.linalg.eig(A)
     print(f'Open-loop eigenvalues are = {Lamb_A}\n')
 
-    # K_nom = -np.array([[3.4495, 2.2975, 5.6871]])
+    # K_nom = np.array([[3.4495, 2.2975, 5.6871]])
 
     # Create variables
     F = cvxpy.Variable((1, 3))
@@ -57,7 +57,7 @@ def main():
     epsilon = 1e-6
     constraints = [
         X >> epsilon,
-        (A @ X) + (X @ A.T) + (B @ F) + (F.T @ B.T) << 0,
+        (A @ X) + (X @ A.T) - (B @ F) - (F.T @ B.T) << 0,
     ]
     # Create problem
     prob = cvxpy.Problem(objective, constraints)
@@ -67,8 +67,8 @@ def main():
     F_opt = F.value
     K_opt = np.linalg.solve(X_opt.T, F_opt.T)
     K_opt = K_opt.T
-    A_cl = A + B @ K_opt
-    # A_cl = A + B @ K_nom
+    A_cl = A - B @ K_opt
+    # A_cl = A - B @ K_nom
 
     print(f'Gain matrix K = {K_opt}\n')
 
