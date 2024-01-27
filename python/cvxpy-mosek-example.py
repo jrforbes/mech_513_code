@@ -40,7 +40,7 @@ def main():
     # C matrix
     C = np.array([1, 0, 0])
 
-    # C matrix
+    # D matrix
     D = np.array([0])
 
     Lamb_A, V_A = np.linalg.eig(A)
